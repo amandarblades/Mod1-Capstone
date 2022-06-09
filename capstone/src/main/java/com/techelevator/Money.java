@@ -2,9 +2,9 @@ package com.techelevator;
 
 public class Money {
 
-    private double balance;
+    private static double balance;
 
-    public double getBalance() {
+    public static double getBalance() {
         return balance;
     }
 
