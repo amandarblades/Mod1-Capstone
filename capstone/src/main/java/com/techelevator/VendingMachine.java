@@ -66,8 +66,10 @@ public class VendingMachine {
             double updatedBalance = balance;
             Scanner userInput = new Scanner(System.in);
             boolean keepAdding = true;
+
             do {
-                System.out.println("How much money, in whole dollars, do you want to insert?");
+                System.out.println("How much money do you want to insert? Machine only accepts whole dollars.(ex: 5)");
+
                 String addToBalance = userInput.nextLine();
                 double moneyToAdd = Double.parseDouble(addToBalance);
                 updatedBalance += moneyToAdd;

@@ -12,12 +12,16 @@ public class ProductsTest {
         Assert.assertEquals("name", pTest.getName());
         double price = pTest.getPrice();
        Assert.assertEquals("A3", pTest.getVendingLocation());
-      // Assert.assertEquals(2, pTest.getPrice());
+      Assert.assertEquals(2, pTest.getPrice(), 0.01);
+
+
 
     }
 
     @Test
     public void test_quantityUpdater(){
+        pTest.updateItemQuantity();
+        Assert.assertEquals(4, pTest.getQuantity());
 
     }
 
