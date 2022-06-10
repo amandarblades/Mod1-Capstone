@@ -4,7 +4,7 @@ public class Money {
 
     private static double balance;
 
-    public static double getBalance() {
+    public double getBalance() {
         return balance;
     }
 

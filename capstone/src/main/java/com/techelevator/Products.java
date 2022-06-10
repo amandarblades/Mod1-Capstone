@@ -41,13 +41,6 @@ public class Products {
         this.vendingLocation = vendingLocation;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public String getItemType() {
         return itemType;
