@@ -1,5 +1,7 @@
 package com.techelevator;
 
+import java.text.NumberFormat;
+
 public class Products {
 
     private String name;
@@ -8,37 +10,22 @@ public class Products {
     private String vendingLocation;
     private String message;
     private String itemType;
+    NumberFormat currency = NumberFormat.getCurrencyInstance();
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getVendingLocation() {
+     public String getVendingLocation() {
         return vendingLocation;
-    }
-
-    public void setVendingLocation(String vendingLocation) {
-        this.vendingLocation = vendingLocation;
     }
 
 
@@ -60,8 +47,8 @@ public class Products {
     }
 
     public void dispenseItem(double currentBalance){
-        System.out.println(name + ": " + price);
-        System.out.println("Current Balance: " + currentBalance);
+        System.out.println(name + ": " + currency.format(price));
+        System.out.println("Current Balance: " + currency.format(currentBalance));
         System.out.println(message);
 
     }
@@ -69,12 +56,6 @@ public class Products {
     public void updateItemQuantity(){
         quantity--;
     }
-
-    public void invalidItem(){
-        System.out.println("Item is not available");
-
-    }
-
 
 
 }/**End of class **/

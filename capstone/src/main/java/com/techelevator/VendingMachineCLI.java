@@ -2,9 +2,12 @@ package com.techelevator;
 
 import com.techelevator.view.Menu;
 
+import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.List;
 
 public class VendingMachineCLI {
+	NumberFormat currency = NumberFormat.getCurrencyInstance();
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
@@ -22,7 +25,7 @@ public class VendingMachineCLI {
 		this.menu = menu;
 	}
 
-	public void run() {
+	public void run() throws IOException {
 		boolean vending = true;
 		String[] activeMenu = MAIN_MENU_OPTIONS;
 
@@ -41,7 +44,7 @@ public class VendingMachineCLI {
 				vm.displayProducts(products);
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase
-				System.out.println("Current Money Provided: $" + balance.getBalance());
+				System.out.println("Current Money Provided: " + currency.format(balance.getBalance()));
 				boolean purchasing = true;
 				while(purchasing){
 					String purchaseChoice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
@@ -49,7 +52,6 @@ public class VendingMachineCLI {
 					if(purchaseChoice.equals(PURCHASE_MENU_FEED)){
 						balance.setBalance(vm.feedMoney(balance.getBalance()));
 
-						System.out.println(balance.getBalance());
 					}
 					else if (purchaseChoice.equals(PURCHASE_MENU_SELECT)){
 						//Purchase
@@ -69,7 +71,7 @@ public class VendingMachineCLI {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Menu menu = new Menu(System.in, System.out);
 		VendingMachineCLI cli = new VendingMachineCLI(menu);
 

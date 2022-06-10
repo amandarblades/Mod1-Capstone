@@ -4,11 +4,16 @@ import com.techelevator.view.Menu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.text.NumberFormat;
 
 public class VendingMachine {
+    Log vmLog = new Log();
+    NumberFormat currency = NumberFormat.getCurrencyInstance();
+
     public List <Products> importProducts() {
 
             final int ITEM_LOCATION = 0;
@@ -53,10 +58,11 @@ public class VendingMachine {
     }
         public void displayProducts(List<Products> products ) {
             for (Products p : products) {
-                System.out.println(p.getVendingLocation() + ": " + p.getName() + " -- " + p.getQuantity());
+                System.out.println(p.getVendingLocation() + ": " + p.getName() +" " + currency.format(p.getPrice()) + " -- "+ p.getQuantity());
             }
         }
-        public double feedMoney(double balance){
+        public double feedMoney(double balance) throws IOException {
+
             double updatedBalance = balance;
             Scanner userInput = new Scanner(System.in);
             boolean keepAdding = true;
@@ -65,27 +71,28 @@ public class VendingMachine {
                 String addToBalance = userInput.nextLine();
                 double moneyToAdd = Double.parseDouble(addToBalance);
                 updatedBalance += moneyToAdd;
-                System.out.println("Current Money Provided: $" + (updatedBalance - balance));
+                System.out.println("Current Money Provided: " + currency.format((updatedBalance - balance)));
                 System.out.println("Would you like to add more money? (y/n)");
                 String continueAdding = userInput.nextLine();
                 if(continueAdding.toLowerCase().equals("n")){
                     keepAdding = false;
                 }
-
+                vmLog.printToLog("FEED MONEY:", moneyToAdd, updatedBalance) ;
 
             } while(keepAdding);
 
             return updatedBalance;
         }
 
-        public void purchaseProduct(Money balance, List<Products> products){
+        public void purchaseProduct(Money balance, List<Products> products) throws IOException {
         Scanner userInput = new Scanner(System.in);
-        boolean continuePurchasing = false;
+        boolean continuePurchasing = true;
+        boolean ifFound = false;
+        do {
+
             displayProducts(products);
             System.out.println("Which product would you like to purchase?");
             String purchase = userInput.nextLine();
-
-            do {
 
 
                 for (Products p : products) {
@@ -93,23 +100,37 @@ public class VendingMachine {
                         if (p.getQuantity() == 0) {
                             System.out.println("Item is Sold Out");
                         } else {
-                            p.dispenseItem(balance.getBalance());
-                            p.updateItemQuantity();
-                            balance.decreaseBalance(p.getPrice());
+                            if(balance.getBalance() >= p.getPrice()){
+                                balance.decreaseBalance(p.getPrice());
+                                p.dispenseItem(balance.getBalance());
+                                p.updateItemQuantity();
+                                vmLog.printToLog(p.getName(), p.getPrice(), balance.getBalance());
+
+                            }
+                            else {
+                                System.out.println("Sorry, not enough money.");
+                            }
+
                         }
-                    } else {
-                        System.out.println("The item does not exist");
+                        ifFound = true;
                     }
+
+                    }
+                if(!ifFound) {
+                    System.out.println("The item does not exist");
+
                 }
-                System.out.println("Would you like to maka another purchase? (y/n)");
+                System.out.println("Would you like to make another purchase? (y/n)");
                 String anotherPurchase = userInput.nextLine();
-                if(anotherPurchase.toLowerCase().equals("n")){
+                if(anotherPurchase.toLowerCase().equals("n")) {
                     continuePurchasing = false;
                 }
 
 
             } while(continuePurchasing);
 
+
+            balance.makeChange(balance.getBalance(), vmLog);
 
         }
 

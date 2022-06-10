@@ -3,11 +3,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.*;
 
 public class Log {
+    NumberFormat currency = NumberFormat.getCurrencyInstance();
 
     private String getFormattedDate() {
         DateTimeFormatter formatter;
@@ -24,10 +26,10 @@ public class Log {
           return formattedTime;
       }
 
-        private void printToLog(String operation, double operationAmt, double newBalance) throws IOException {
+        public void printToLog(String operation, double operationAmt, double newBalance) throws IOException {
 
-        File inPutFile = new File("log");
-        String message = getFormattedDate() + " " + getFormattedTime() + " " + operation + " " + "$" + operationAmt + " " + "$" + newBalance;
+        File inPutFile = new File("log.txt");
+        String message = getFormattedDate() + " " + getFormattedTime() + " " + operation + " " +  currency.format(operationAmt )  + " " + currency.format(newBalance) + "\n";
 
 
     PrintWriter writer = null;
